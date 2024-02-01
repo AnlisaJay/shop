@@ -65,29 +65,43 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+    res.json({ user });
+  } catch (error) {
+    console.error("Ошибка при получении данных о пользователе:", error);
+    res.status(500).json({ message: "Произошла ошибка при получении данных о пользователе" });
+  }
+});
+
 app.post("/user/:userId/change-password", async (req, res) => {
   try {
     const userId = req.params.userId;
     const { newPassword } = req.body;
 
+    // Найдите пользователя по его ID и обновите пароль
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
     user.password = hashedPassword;
     await user.save();
 
     res.json({ message: "Пароль успешно изменен" });
   } catch (error) {
-    console.error("Ошибка при смене пароля пользователя:", error);
-    res
-      .status(500)
-      .json({ message: "Произошла ошибка при смене пароля пользователя" });
+    console.error("Ошибка при изменении пароля пользователя:", error);
+    res.status(500).json({ message: "Произошла ошибка при изменении пароля пользователя" });
   }
 });
+
+
 
 app.get("/products", async (req, res) => {
   try {

@@ -9,11 +9,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orders: [],
+      orders: [], // Каждый элемент массива будет содержать объект {item: товар, quantity: количество}
       currentItems: [],
       showFullItem: false,
       fullItem: {}
     };
+    
     this.addToOrder = this.addToOrder.bind(this);
     this.deleteOrder = this.deleteOrder.bind(this);
     this.chooseCategory = this.chooseCategory.bind(this);
@@ -77,18 +78,20 @@ class App extends Component {
       filteredItems: filteredItems
     });
   }
-  deleteOrder(id) {
-    this.setState({orders: this.state.orders.filter(el => el.id !== id)})
+  deleteOrder(index) {
+    // Создаем копию массива заказов и удаляем товар по указанному индексу
+    const updatedOrders = [...this.state.orders];
+    updatedOrders.splice(index, 1);
+    // Обновляем состояние orders
+    this.setState({ orders: updatedOrders });
   }
   
+  
   addToOrder(item) {
-    let isInArray = false
-    this.state.orders.forEach(el => {
-      if(el.id === item.id)
-          isInArray = true
-    })
-    if(!isInArray)
-    this.setState({ orders: [...this.state.orders, item] })
+    // Создаем новый массив заказов, добавляя в него новый товар
+    const updatedOrders = [...this.state.orders, item];
+    // Обновляем состояние orders
+    this.setState({ orders: updatedOrders });
   }
 }
 

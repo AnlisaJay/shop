@@ -17,6 +17,7 @@ const Routes = () => {
           <Route path="/categories" component={Categories} />
           <Route path="/show-full-item" component={ShowFullItem} />
           <Route path="/personal-account/:userId" component={PersonalAccountPage} />
+
         </Switch>
         <Footer />
       </div>
